@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Електрозарядні Станції</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1 class="header__title">Електрозарядні Станції</h1>
+      </header>
+
+      <section class="section section--form">
+        <h2 class="section__title">Додати нову станцію</h2>
+        <form id="station-form" class="form">
+          <div class="form__group">
+            <label for="name-input" class="form__label">Назва станції</label>
+            <input
+              type="text"
+              id="name-input"
+              name="name-input"
+              class="form__input"
+              required
+              placeholder="Наприклад: 'Київ Центр'"
+            />
+          </div>
+
+          <div class="form__group">
+            <label for="address-input" class="form__label">Адреса</label>
+            <input
+              type="text"
+              id="address-input"
+              name="address-input"
+              class="form__input"
+              required
+              placeholder="Вулиця, номер"
+            />
+          </div>
+
+          <div class="form__group">
+            <label for="power-input" class="form__label"
+              >Макс. потужність (кВт)</label
+            >
+            <input
+              type="number"
+              id="power-input"
+              name="power-input"
+              class="form__input"
+              required
+              min="50"
+              max="500"
+              placeholder="50-500"
+            />
+          </div>
+
+          <div class="form__group">
+            <label for="chargers-input" class="form__label"
+              >Кількість портів</label
+            >
+            <input
+              type="number"
+              id="chargers-input"
+              name="chargers-input"
+              class="form__input"
+              required
+              min="1"
+              max="10"
+              placeholder="1-10"
+            />
+          </div>
+
+          <button type="submit" id="add-btn" class="button button--primary">
+            Додати станцію
+          </button>
+        </form>
+      </section>
+
+      <section class="section section--controls">
+        <div class="controls">
+          <div class="controls__group">
+            <input
+              type="text"
+              id="search-input"
+              class="controls__input"
+              placeholder="Пошук за назвою"
+            />
+          </div>
+
+          <div class="controls__group">
+            <select id="status-filter" class="controls__select">
+              <option value="">Всі статуси</option>
+              <option value="active">Активна</option>
+              <option value="busy">Зайнята</option>
+              <option value="offline">Не працює</option>
+            </select>
+          </div>
+
+          <div class="controls__group">
+            <select id="sort-select" class="controls__select">
+              <option value="">Без сортування</option>
+              <option value="power_desc">Потужність (спадання)</option>
+              <option value="power_asc">Потужність (зростання)</option>
+              <option value="energy_desc">Спожита енергія (спадання)</option>
+              <option value="energy_asc">Спожита енергія (зростання)</option>
+              <option value="ports_desc">Кількість портів (спадання)</option>
+              <option value="ports_asc">Кількість портів (зростання)</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--list">
+        <div id="station-list" class="station-list"></div>
+      </section>
+
+      <div class="pagination">
+        <button id="prev-btn" class="button button--secondary">Назад</button>
+        <span id="page-info" class="pagination__info">Сторінка 1</span>
+        <button id="next-btn" class="button button--secondary">Вперед</button>
+      </div>
+    </div>
+
+    <div id="modal" class="modal hidden">
+      <div class="modal__content">
+        <h3 class="modal__title">Завершення зарядки</h3>
+        <div class="form__group">
+          <label for="kwh-input" class="form__label"
+            >Спожито енергії (кВт*год)</label
+          >
+          <input
+            type="number"
+            id="kwh-input"
+            name="kwh-input"
+            class="form__input"
+            min="1"
+            max="300"
+            step="0.1"
+          />
+        </div>
+        <div class="modal__actions">
+          <button id="confirm-stop-btn" class="button button--primary">
+            Підтвердити
+          </button>
+          <button id="cancel-stop-btn" class="button button--secondary">
+            Скасувати
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
