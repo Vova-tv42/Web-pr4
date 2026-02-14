@@ -210,17 +210,6 @@ app.post("/api/stations/:id/stop-session", (req, res) => {
   res.json(station);
 });
 
-// POST /api/stations/:id/toggle-status
-app.post("/api/stations/:id/toggle-status", (req, res) => {
-  const station = stations.find((s) => s.id === Number(req.params.id));
-  if (!station) {
-    return res.status(404).json({ message: "Station not found" });
-  }
-
-  station.status = station.status === "offline" ? "active" : "offline";
-  res.json(station);
-});
-
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
