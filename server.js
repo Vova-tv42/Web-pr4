@@ -87,7 +87,7 @@ app.get("/api/stations", (req, res) => {
   }
 
   const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 10;
+  const limit = Number(req.query.limit) || 6;
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
 
@@ -105,7 +105,7 @@ app.get("/api/stations", (req, res) => {
 app.get("/api/stations/:id", (req, res) => {
   const station = stations.find((s) => s.id === Number(req.params.id));
   if (!station) {
-    return res.status(404).json({ message: "Station not found" });
+    return res.status(404).json({ message: "Станцію не знайдено" });
   }
 
   res.json(station);
@@ -116,7 +116,7 @@ let nextId = 4;
 app.post("/api/stations", (req, res) => {
   const { name, address, maxPower, chargerCount } = req.body;
   if (!name || !address || !maxPower || !chargerCount) {
-    return res.status(400).json({ message: "Missing required fields" });
+    return res.status(400).json({ message: "Відсутні обов'язкові поля" });
   }
 
   const power = Number(maxPower);
@@ -125,13 +125,13 @@ app.post("/api/stations", (req, res) => {
   if (power < 50 || power > 500) {
     return res
       .status(400)
-      .json({ message: "Max power must be between 50 and 500 kW" });
+      .json({ message: "Максимальна потужність має бути від 50 до 500 кВт" });
   }
 
   if (count < 1 || count > 10) {
     return res
       .status(400)
-      .json({ message: "Charger count must be between 1 and 10" });
+      .json({ message: "Кількість зарядних пристроїв має бути від 1 до 10" });
   }
 
   const newStation = {
@@ -155,7 +155,7 @@ app.put("/api/stations/:id", (req, res) => {
   const index = stations.findIndex((s) => s.id === id);
 
   if (index === -1) {
-    return res.status(404).json({ message: "Station not found" });
+    return res.status(404).json({ message: "Станцію не знайдено" });
   }
 
   stations[index] = { ...stations[index], ...req.body };
@@ -166,11 +166,13 @@ app.put("/api/stations/:id", (req, res) => {
 app.post("/api/stations/:id/start-session", (req, res) => {
   const station = stations.find((s) => s.id === Number(req.params.id));
   if (!station) {
-    return res.status(404).json({ message: "Station not found" });
+    return res.status(404).json({ message: "Станцію не знайдено" });
   }
 
   if (station.availableChargers <= 0) {
-    return res.status(400).json({ message: "No chargers available" });
+    return res
+      .status(400)
+      .json({ message: "Немає доступних зарядних пристроїв" });
   }
 
   station.availableChargers--;
@@ -185,18 +187,18 @@ app.post("/api/stations/:id/start-session", (req, res) => {
 app.post("/api/stations/:id/stop-session", (req, res) => {
   const station = stations.find((s) => s.id === Number(req.params.id));
   if (!station) {
-    return res.status(404).json({ message: "Station not found" });
+    return res.status(404).json({ message: "Станцію не знайдено" });
   }
 
   const kwh = Number(req.body.kwh);
   if (isNaN(kwh) || kwh < 1 || kwh > 300) {
     return res
       .status(400)
-      .json({ message: "Consumed energy must be between 1 and 300 kWh" });
+      .json({ message: "Спожита енергія повинна бути від 1 до 300 кВт" });
   }
 
   if (station.availableChargers >= station.chargerCount) {
-    res.status(400).json({ message: "All chargers are already free" });
+    res.status(400).json({ message: "Усі зарядні пристрої вже вільні" });
     return;
   }
 
